@@ -1,0 +1,27 @@
+version: "3.5"
+services:
+  app:
+    build: .
+    working_dir: /usr/src/app
+    container_name: node-app
+    links:
+      - mysql
+    ports:
+      - "8000:8000"
+    environment:
+      "NODE_ENV": "development"
+
+  mysql:
+    env_file: ./.env
+    image: mysql:8
+    container_name: mysql
+    volumes:
+      - ./data/db:/var/lib/mysql
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      "MYSQL_DATABASE": "node-db"
+      "MYSQL_ROOT_PASSWORD": "admin"
+    security_opt:
+       - seccomp:unconfined
